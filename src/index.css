@@ -1,0 +1,112 @@
+body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #0a192f;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90%;
+      max-width: 800px;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #64ffda;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    input {
+      margin-bottom: 15px;
+      padding: 12px;
+      border: 2px solid #1e3a8a;
+      border-radius: 6px;
+      background-color: #112240;
+      color: #fff;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 12px 20px;
+      background-color: #ff9f1c;
+      color: #0a192f;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e67e22;
+    }
+
+    .card {
+      background-color: #112240;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      padding: 25px;
+      margin-bottom: 25px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #64ffda;
+      border-bottom: 1px solid #1e3a8a;
+      padding-bottom: 10px;
+    }
+
+    .card p {
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .card strong {
+      font-weight: bold;
+      color: #64ffda;
+    }
+
+    .loading {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #3498db;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    a {
+      color: #ff9f1c;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      text-decoration: underline;
+      color: #e67e22;
+    }
+
+    .payment-link {
+      margin-top: 20px;
+      font-size: 1.2em;
+      text-align: center;
+    }
