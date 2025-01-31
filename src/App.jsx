@@ -80,7 +80,7 @@ import React, { useState } from 'react';
         setShowOnuDrawer(!showOnuDrawer);
         if (!showOnuDrawer && response && response.ftthlink && response.ftthpos) {
           try {
-            const res = await fetch('https://workflows.apanet.tec.br/webhook-test/52353b91-f8af-41cb-a6f8-2062d1aef2d2', {
+            const res = await fetch('https://webhooks.apanet.tec.br/webhook/52353b91-f8af-41cb-a6f8-2062d1aef2d2', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
