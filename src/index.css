@@ -63,10 +63,10 @@ body {
 
     .card h2 {
       margin-top: 0;
-      margin-bottom: 20px;
+      margin-bottom: 5px;
       color: #64ffda;
-      border-bottom: 1px solid #1e3a8a;
-      padding-bottom: 10px;
+      text-align: left;
+      font-size: 1.3em;
     }
 
     .card p {
@@ -109,4 +109,50 @@ body {
       margin-top: 20px;
       font-size: 1.2em;
       text-align: center;
+    }
+
+    .contract-status {
+      font-size: 1.5em;
+      color: #ff9f1c;
+      text-align: center;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .onu-button {
+      background: none;
+      border: none;
+      color: #64ffda;
+      cursor: pointer;
+      font-size: 1.2em;
+      margin-left: 5px;
+      transition: color 0.3s ease;
+      vertical-align: middle;
+    }
+
+    .onu-button:hover {
+      color: #ff9f1c;
+    }
+
+    .onu-drawer {
+      margin-top: 10px;
+      padding: 15px;
+      border-top: 1px solid #1e3a8a;
+      background-color: #112240;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .plan-highlight {
+      background-color: #1e3a8a;
+      padding: 5px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      font-size: 0.9em;
+      margin-bottom: 10px;
+    }
+
+    .onu-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
     }

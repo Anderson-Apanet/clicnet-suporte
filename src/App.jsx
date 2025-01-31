@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+    import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
     function App() {
       const [pppoe, setPppoe] = useState('');
       const [response, setResponse] = useState(null);
       const [error, setError] = useState(null);
       const [loading, setLoading] = useState(false);
+      const [showOnuDrawer, setShowOnuDrawer] = useState(false);
 
       const handleSearch = async () => {
         setError(null);
@@ -43,7 +45,26 @@ import React, { useState } from 'react';
         return response.Subscriptions[0]?.Transactions?.[0]?.paymentLink || 'N/A';
       };
 
+      const getConcentrator = () => {
+        if (!response || !response.concentrador) {
+          return 'N/A';
+        }
+        if (response.concentrador === '172.16.0.2') {
+          return 'Core1';
+        } else if (response.concentrador === '172.16.0.6') {
+          return 'Core2';
+        }
+        return response.concentrador;
+      };
+
       const paymentLink = getPaymentLink();
+      const concentrator = getConcentrator();
+
+      const showOnuButton = response && response.conexao === 'FTTH' && response.ftthlink && response.ftthpos;
+
+      const toggleOnuDrawer = () => {
+        setShowOnuDrawer(!showOnuDrawer);
+      };
 
       return (
         <div className="container">
@@ -64,9 +85,27 @@ import React, { useState } from 'react';
 
           {response && (
             <div className="card">
-              <h2>
-                {response.cliente} - {response.plano}
+              <h2 style={{fontSize: '1.4em'}}>
+                {response.cliente}
               </h2>
+              <p className="plan-highlight">
+                {response.plano}
+              </p>
+              {paymentLink !== 'N/A' ? (
+                <p className="payment-link">
+                  <strong>Link Financeiro:</strong>{' '}
+                  <a href={paymentLink} target="_blank" rel="noopener noreferrer">
+                    Link
+                  </a>
+                </p>
+              ) : (
+                <p className="payment-link">
+                  <strong>Link Financeiro:</strong> N/A
+                </p>
+              )}
+              <p className="contract-status">
+                <strong>Status:</strong> {response.status}
+              </p>
               <p>
                 <strong>Conexão:</strong> {response.conexao}
               </p>
@@ -77,7 +116,10 @@ import React, { useState } from 'react';
                 <strong>FTTH Pos:</strong> {response.ftthpos}
               </p>
               <p>
-                <strong>Concentrador:</strong> {response.concentrador}
+                <strong>CTO:</strong> {response.cto}
+              </p>
+              <p>
+                <strong>Concentrador:</strong> {concentrator}
               </p>
               <p>
                 <strong>Interface:</strong> {response.interface}
@@ -94,17 +136,26 @@ import React, { useState } from 'react';
               <p>
                 <strong>IPv4:</strong> {response.ipv4}
               </p>
-              {paymentLink !== 'N/A' ? (
-                <p className="payment-link">
-                  <strong>Payment Link:</strong>{' '}
-                  <a href={paymentLink} target="_blank" rel="noopener noreferrer">
-                    Link
-                  </a>
+              
+              {!showOnuButton && response.conexao === 'FTTH' && (
+                <p style={{ color: '#ff9f1c', textAlign: 'center', marginTop: '10px' }}>
+                  Por favor, atualize os dados do contrato para visualizar o sinal da ONU.
                 </p>
-              ) : (
-                <p className="payment-link">
-                  <strong>Payment Link:</strong> N/A
-                </p>
+              )}
+              
+              {showOnuButton && (
+                <div style={{textAlign: 'right', marginBottom: '10px'}}>
+                  <button className="onu-button" onClick={toggleOnuDrawer}>
+                    {showOnuDrawer ? <FaChevronUp /> : <FaChevronDown />}
+                  </button>
+                </div>
+              )}
+              {showOnuDrawer && (
+                <div className="onu-drawer">
+                  <p>
+                    <strong>Sinal da ONU:</strong> (Dados do sinal da ONU aqui)
+                  </p>
+                </div>
               )}
             </div>
           )}
