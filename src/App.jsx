@@ -135,16 +135,35 @@ import React, { useState, useEffect } from 'react';
               body: JSON.stringify({ cliente: response.cliente }),
             });
 
-            if (!res.ok) {
+            if (res.ok) {
+              const data = await res.json();
+              if (data && data.data) {
+                // Decode base64
+                const pdfBase64 = data.data;
+                const binaryString = atob(pdfBase64);
+                const binaryLen = binaryString.length;
+                const bytes = new Uint8Array(binaryLen);
+                for (let i = 0; i < binaryLen; i++) {
+                  bytes[i] = binaryString.charCodeAt(i);
+                }
+                const blob = new Blob([bytes], { type: 'application/pdf' });
+
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `nota_fiscal_${response.cliente}.pdf`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+              } else {
+                setError('PDF data not found in response.');
+              }
+            } else {
               const message = `HTTP error! status: ${res.status}`;
               setError(message);
               console.error('Nota Fiscal API Error:', message);
-              return;
             }
-
-            const data = await res.json();
-            console.log('Nota Fiscal API Response:', data);
-            // Handle the response data as needed (e.g., open the PDF in a new tab)
           } catch (err) {
             setError(err.message);
             console.error('Nota Fiscal API Error:', err);
