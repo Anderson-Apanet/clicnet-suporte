@@ -92,10 +92,10 @@ import React, { useState, useEffect } from 'react';
                 setError(message);
                 try {
                   const errorData = await res.json();
-                  console.error('ONU Signal API Error Details:', errorData);
+                  console.error('API Error Details:', errorData);
                   setOnuSignal(null);
                 } catch (jsonError) {
-                  console.error('ONU Signal API Error (no JSON details):', res);
+                  console.error('API Error (no JSON details):', res);
                   setError(message);
                   setOnuSignal(null);
                 }
@@ -127,7 +127,7 @@ import React, { useState, useEffect } from 'react';
       const handleNotaFiscalClick = async () => {
         if (response && response.cliente) {
           try {
-            const res = await fetch('https://workflows.apanet.tec.br/webhook-test/gerapdfnf', {
+            const res = await fetch('https://webhooks.apanet.tec.br/webhook/gerapdfnf', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
