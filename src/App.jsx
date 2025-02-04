@@ -72,7 +72,7 @@ import React, { useState, useEffect } from 'react';
 
       useEffect(() => {
         const fetchOnuSignal = async () => {
-          if (response && response.ftthlink && response.ftthpos && response.concentrador) {
+          if (response && response.ftthlink && response.ftthpos && concentrator !== 'N/A') {
             setOnuSignalLoading(true);
             try {
               const res = await fetch('https://webhooks.apanet.tec.br/webhook/52353b91-f8af-41cb-a6f8-2062d1aef2d2', {
@@ -120,9 +120,39 @@ import React, { useState, useEffect } from 'react';
         };
 
         fetchOnuSignal();
-      }, [response]);
+      }, [response, concentrator]);
 
       const paymentLink = getPaymentLink();
+
+      const handleNotaFiscalClick = async () => {
+        if (response && response.cliente) {
+          try {
+            const res = await fetch('https://workflows.apanet.tec.br/webhook-test/gerapdfnf', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ cliente: response.cliente }),
+            });
+
+            if (!res.ok) {
+              const message = `HTTP error! status: ${res.status}`;
+              setError(message);
+              console.error('Nota Fiscal API Error:', message);
+              return;
+            }
+
+            const data = await res.json();
+            console.log('Nota Fiscal API Response:', data);
+            // Handle the response data as needed (e.g., open the PDF in a new tab)
+          } catch (err) {
+            setError(err.message);
+            console.error('Nota Fiscal API Error:', err);
+          }
+        } else {
+          setError('Cliente não encontrado.');
+        }
+      };
 
       return (
         <div className="container">
@@ -154,16 +184,19 @@ import React, { useState, useEffect } from 'react';
                   {response.status}
                 </p>
               </div>
-              <button style={{
-                padding: '8px 12px',
-                backgroundColor: '#64ffda',
-                color: '#0a192f',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                marginBottom: '10px'
-              }}>
+              <button
+                style={{
+                  padding: '8px 12px',
+                  backgroundColor: '#64ffda',
+                  color: '#0a192f',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  marginBottom: '10px',
+                }}
+                onClick={handleNotaFiscalClick}
+              >
                 Nota Fiscal
               </button>
               {paymentLink !== 'N/A' ? (
