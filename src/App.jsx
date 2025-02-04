@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
       const [onuSignal, setOnuSignal] = useState(null);
       const [onuSignalLoading, setOnuSignalLoading] = useState(false);
       const [concentrator, setConcentrator] = useState('N/A');
+      const [isNotaFiscalLoading, setIsNotaFiscalLoading] = useState(false);
 
       const handleSearch = async () => {
         setError(null);
@@ -126,6 +127,7 @@ import React, { useState, useEffect } from 'react';
 
       const handleNotaFiscalClick = async () => {
         if (response && response.cliente) {
+          setIsNotaFiscalLoading(true);
           try {
             const res = await fetch('https://webhooks.apanet.tec.br/webhook/gerapdfnf', {
               method: 'POST',
@@ -167,15 +169,18 @@ import React, { useState, useEffect } from 'react';
           } catch (err) {
             setError(err.message);
             console.error('Nota Fiscal API Error:', err);
+          } finally {
+            setIsNotaFiscalLoading(false);
           }
         } else {
           setError('Cliente não encontrado.');
+          setIsNotaFiscalLoading(false);
         }
       };
 
       return (
         <div className="container">
-          <h1>PPPoE Search</h1>
+          <h1>Digite o PPPoE</h1>
           <input
             type="text"
             placeholder="Enter PPPoE"
@@ -183,7 +188,7 @@ import React, { useState, useEffect } from 'react';
             onChange={(e) => setPppoe(e.target.value)}
           />
           <button onClick={handleSearch} disabled={loading}>
-            Search
+            Pesquisar
           </button>
 
           {loading && <div className="loading"></div>}
@@ -215,8 +220,10 @@ import React, { useState, useEffect } from 'react';
                   marginBottom: '10px',
                 }}
                 onClick={handleNotaFiscalClick}
+                disabled={isNotaFiscalLoading}
               >
                 Nota Fiscal
+                {isNotaFiscalLoading && <div className="loading"></div>}
               </button>
               {paymentLink !== 'N/A' ? (
                 <p className="payment-link">
