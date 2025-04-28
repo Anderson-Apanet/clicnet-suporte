@@ -318,13 +318,13 @@ function App() {
                     <div><strong>Vencimento:</strong> {tx.vencimento ? (new Date(tx.vencimento).toLocaleDateString('pt-BR')) : '--'}</div>
                     <div><strong>Valor:</strong> <span style={{ color: '#64ffda', fontWeight: 600 }}>{(tx.valor/100)?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span></div>
                     <div><strong>Status:</strong> <span style={{ color: isPago(tx) ? '#64ffda' : '#ff9f1c', fontWeight: 600 }}>{isPago(tx) ? 'Pago' : 'Pendente'}</span></div>
-                    {tx.boleto_url && (
+                    {(tx.metodo_pagamento !== 'creditcard' && dadosContrato.financeiro_metodo_pagamento !== 'creditcard') && tx.boleto_url && (
                       <div><a href={tx.boleto_url} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'underline', fontWeight: 500 }}>2ª via do Boleto</a></div>
                     )}
-                    {tx.pix_url && (
+                    {(tx.metodo_pagamento !== 'creditcard' && dadosContrato.financeiro_metodo_pagamento !== 'creditcard') && tx.pix_url && (
                       <div><a href={tx.pix_url} target="_blank" rel="noopener noreferrer" style={{ color: '#64ffda', textDecoration: 'underline', fontWeight: 500 }}>Pagar com PIX</a></div>
                     )}
-                    {tx.boleto_codigo_barras && (
+                    {(tx.metodo_pagamento !== 'creditcard' && dadosContrato.financeiro_metodo_pagamento !== 'creditcard') && tx.boleto_codigo_barras && (
                       <div style={{ fontSize: 13, color: '#fff', opacity: 0.85 }}><strong>Código de Barras:</strong> {tx.boleto_codigo_barras}</div>
                     )}
                   </div>
