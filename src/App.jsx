@@ -24,6 +24,13 @@ function App() {
   // Agora só precisamos de um estado para os dados
   const [dadosContrato, setDadosContrato] = useState(null);
 
+  // Função utilitária para status de pagamento
+  function isPago(tx) {
+    if (tx.status === 'payedBoleto') return true; // boleto pago
+    if (tx.status === 'captured' || tx.status === 'payExternal') return true; // cartão de crédito pago
+    return false;
+  }
+
   const handleSearch = async () => {
     setError(null);
     setResponse(null);
@@ -310,7 +317,7 @@ function App() {
                   }}>
                     <div><strong>Vencimento:</strong> {tx.vencimento ? (new Date(tx.vencimento).toLocaleDateString('pt-BR')) : '--'}</div>
                     <div><strong>Valor:</strong> <span style={{ color: '#64ffda', fontWeight: 600 }}>{(tx.valor/100)?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span></div>
-                    <div><strong>Status:</strong> <span style={{ color: tx.status === 'payedBoleto' ? '#64ffda' : '#ff9f1c', fontWeight: 600 }}>{tx.status === 'payedBoleto' ? 'Pago' : 'Pendente'}</span></div>
+                    <div><strong>Status:</strong> <span style={{ color: isPago(tx) ? '#64ffda' : '#ff9f1c', fontWeight: 600 }}>{isPago(tx) ? 'Pago' : 'Pendente'}</span></div>
                     {tx.boleto_url && (
                       <div><a href={tx.boleto_url} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'underline', fontWeight: 500 }}>2ª via do Boleto</a></div>
                     )}
