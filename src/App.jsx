@@ -31,8 +31,16 @@ function App() {
       }
       const data = await res.json();
       setResponse(data);
-      if (data) {
-        setDadosContrato(data); // salva o objeto inteiro
+      if (Array.isArray(data)) {
+        if (data.length > 0) {
+          setDadosContrato(data[0]);
+        } else {
+          setDadosContrato(null);
+        }
+      } else if (data && typeof data === 'object') {
+        setDadosContrato(data);
+      } else {
+        setDadosContrato(null);
       }
     } catch (err) {
       setError(err.message);
@@ -219,23 +227,21 @@ function App() {
             margin: 0,
           }}>
             <h2 style={{ color: '#64ffda', padding: 20, textAlign: 'center', margin: 0, letterSpacing: 1.1 }}>Localização</h2>
-            {dadosContrato.contrato_localizacao ? (
+            {dadosContrato.contrato_localizacao &&
+              typeof dadosContrato.contrato_localizacao.lat === 'number' &&
+              typeof dadosContrato.contrato_localizacao.lng === 'number' &&
+              !isNaN(dadosContrato.contrato_localizacao.lat) &&
+              !isNaN(dadosContrato.contrato_localizacao.lng) ? (
               <MapContainer
-                center={[
-                  dadosContrato.contrato_localizacao.lat,
-                  dadosContrato.contrato_localizacao.lng
-                ]}
+                center={[dadosContrato.contrato_localizacao.lat, dadosContrato.contrato_localizacao.lng]}
                 zoom={16}
-                style={{ height: 240, width: '92%', borderRadius: 12, marginBottom: 16, boxShadow: '0 2px 8px #0004' }}
+                style={{ height: 220, width: '100%', margin: '20px 0', borderRadius: 14 }}
               >
                 <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution="&copy; OpenStreetMap contributors"
                 />
-                <Marker position={[
-                  dadosContrato.contrato_localizacao.lat,
-                  dadosContrato.contrato_localizacao.lng
-                ]}>
+                <Marker position={[dadosContrato.contrato_localizacao.lat, dadosContrato.contrato_localizacao.lng]}>
                   <Popup>
                     {dadosContrato.cliente_nome}<br />
                     {dadosContrato.contrato_endereco}<br />
