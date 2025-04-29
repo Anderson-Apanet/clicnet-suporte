@@ -31,6 +31,23 @@ function App() {
     return false;
   }
 
+  // Função para formatar segundos em horas, minutos e segundos
+  function formataHoras(segundos) {
+    if (!segundos || isNaN(segundos)) return '--';
+    const h = Math.floor(segundos / 3600);
+    const m = Math.floor((segundos % 3600) / 60);
+    const s = Math.floor(segundos % 60);
+    return `${h}h ${m}m ${s}s`;
+  }
+
+  // Função para formatar data/hora no padrão HH:MM:SS DD/MM/YYYY
+  function formataDataHora(dt) {
+    if (!dt) return '--';
+    const d = new Date(dt.replace(' ', 'T'));
+    if (isNaN(d.getTime())) return dt;
+    return d.toLocaleTimeString('pt-BR', { hour12: false }) + ' ' + d.toLocaleDateString('pt-BR');
+  }
+
   const handleSearch = async () => {
     setError(null);
     setResponse(null);
@@ -172,7 +189,6 @@ function App() {
             <div><strong>Contrato Assinado:</strong> {dadosContrato.contrato_assinado === null ? 'Não' : dadosContrato.contrato_assinado ? 'Sim' : 'Não'}</div>
             <div><strong>Pré-pago:</strong> {dadosContrato.contrato_prepago ? 'Sim' : 'Não'}</div>
             <div><strong>Conexão:</strong> {dadosContrato.contrato_conexao}</div>
-            <div><strong>Sinal FTTH:</strong> <span style={{ color: Number(dadosContrato.contrato_ftth_sinal) > -25 ? '#64ffda' : '#ff5555', fontWeight: 700 }}>{dadosContrato.contrato_ftth_sinal ?? 'N/A'}</span></div>
             <div><strong>Plano:</strong> <span style={{ background: '#1e3a8a', color: '#64ffda', borderRadius: 6, padding: '2px 10px', fontWeight: 600 }}>{dadosContrato.contrato_plano_nome}</span></div>
             <div><strong>PPPoE:</strong> <span style={{ fontFamily: 'monospace', color: '#fff' }}>{dadosContrato.contrato_pppoe_username}</span></div>
             <div><strong>Endereço:</strong> {dadosContrato.contrato_endereco}</div>
@@ -217,17 +233,17 @@ function App() {
                 textShadow: '0 1px 4px #0004',
               }}>{dadosContrato.acctstoptime === null || dadosContrato.acctstoptime === '' ? 'Desconectado' : 'Conectado'}</span>
             </div>
-            <div><strong>IP:</strong> <span style={{ fontFamily: 'monospace', color: '#64ffda' }}>{dadosContrato.framedipaddress}</span></div>
-            <div><strong>Servidor:</strong> <span style={{ fontFamily: 'monospace', color: '#64ffda' }}>{dadosContrato.nasipaddress}</span></div>
-            <div><strong>NAS Porta:</strong> <span style={{ fontFamily: 'monospace' }}>{dadosContrato.nasportid}</span></div>
-            <div><strong>Endereço MAC:</strong> <span style={{ fontFamily: 'monospace' }}>{dadosContrato.callingstationid}</span></div>
-            <div><strong>Servidor:</strong> <span style={{ fontFamily: 'monospace' }}>{dadosContrato.calledstationid}</span></div>
-            <div><strong>Sinal FTTH:</strong> <span style={{ color: Number(dadosContrato.contrato_ftth_sinal) > -25 ? '#64ffda' : '#ff5555', fontWeight: 700 }}>{dadosContrato.contrato_ftth_sinal ?? 'N/A'}</span></div>
-            <div><strong>Início Sessão:</strong> {dadosContrato.acctstarttime}</div>
-            <div><strong>Tempo de Sessão:</strong> {dadosContrato.acctsessiontime} segundos</div>
+            <div><strong>IP:</strong> <span style={{ fontFamily: 'monospace', color: '#64ffda' }}>{dadosContrato.framedipaddress || '--'}</span></div>
+            <div><strong>Concentrador:</strong> <span style={{ fontFamily: 'monospace', color: '#64ffda' }}>{dadosContrato.nasipaddress || '--'}</span></div>
+            <div><strong>NAS Porta:</strong> <span style={{ fontFamily: 'monospace' }}>{dadosContrato.nasportid || '--'}</span></div>
+            <div><strong>Servidor:</strong> <span style={{ fontFamily: 'monospace' }}>{dadosContrato.calledstationid || '--'}</span></div>
+            <div><strong>Endereço MAC:</strong> <span style={{ fontFamily: 'monospace' }}>{dadosContrato.callingstationid || '--'}</span></div>
+            <div><strong>Início Sessão:</strong> {formataDataHora(dadosContrato.acctstarttime)}</div>
+            <div><strong>Tempo de Sessão:</strong> {formataHoras(dadosContrato.acctsessiontime)}</div>
             <div><strong>Upload:</strong> <span style={{ color: '#64ffda' }}>{(dadosContrato.acctinputoctets / (1024*1024)).toFixed(2)} MB</span></div>
             <div><strong>Download:</strong> <span style={{ color: '#64ffda' }}>{(dadosContrato.acctoutputoctets / (1024*1024)).toFixed(2)} MB</span></div>
             <div><strong>Motivo Término:</strong> {dadosContrato.acctterminatecause || '---'}</div>
+            <div><strong>Sinal FTTH:</strong> <span style={{ color: Number(dadosContrato.contrato_ftth_sinal) > -25 ? '#64ffda' : '#ff5555', fontWeight: 700 }}>{dadosContrato.contrato_ftth_sinal ?? 'N/A'}</span></div>
           </div>
 
           {/* CARD 3: MAPA LEAFLET */}
