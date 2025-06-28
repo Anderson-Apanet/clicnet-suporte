@@ -244,6 +244,8 @@ function App() {
             <div><strong>Download:</strong> <span style={{ color: '#64ffda' }}>{(dadosContrato.acctoutputoctets / (1024*1024)).toFixed(2)} MB</span></div>
             <div><strong>Motivo Término:</strong> {dadosContrato.acctterminatecause || '---'}</div>
             <div><strong>Sinal FTTH:</strong> <span style={{ color: Number(dadosContrato.contrato_ftth_sinal) > -25 ? '#64ffda' : '#ff5555', fontWeight: 700 }}>{dadosContrato.contrato_ftth_sinal ?? 'N/A'}</span></div>
+            <div><strong>FTTH Link:</strong> <span style={{ fontFamily: 'monospace' }}>{dadosContrato.contrato_ftth_link || 'N/A'}</span></div>
+            <div><strong>FTTH POS:</strong> <span style={{ fontFamily: 'monospace' }}>{dadosContrato.contrato_ftth_pos || 'N/A'}</span></div>
           </div>
 
           {/* CARD 3: MAPA LEAFLET */}
